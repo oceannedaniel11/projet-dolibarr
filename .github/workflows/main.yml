@@ -1,0 +1,22 @@
+name: Deploiement Automatique Pre-prod
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  web-deploy:
+    name: Deployer vers la Pre-prod LWS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code du projet
+        uses: actions/checkout@v4
+
+      - name: Envoyer les fichiers sur le sous-domaine de pre-prod via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.LWS_HOST }}
+          username: ${{ secrets.LWS_USER }}
+          password: ${{ secrets.LWS_PASSWORD }}
+          # Le dossier exact de votre sous-domaine sur LWS
+          server-dir: /pre-prod.ler2telecom.com/
